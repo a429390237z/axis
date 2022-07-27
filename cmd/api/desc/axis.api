@@ -1,0 +1,26 @@
+
+syntax = "v1"
+
+info (
+	title: "阿里云日志服务SLS"
+	desc: "阿里云日志服务SLS"
+	author: "fei.wang2@yintech.cn"
+	email: "fei.wang2@yintech.cn"
+    version: "v1"
+)
+
+type request {
+	// TODO: add members here and delete this comment
+}
+
+type response {
+	// TODO: add members here and delete this comment
+}
+
+service sls-api {
+	@handler GetUser // TODO: set handler name and delete this comment
+	get /users/id/:userId(request) returns(response)
+
+	@handler CreateUser // TODO: set handler name and delete this comment
+	post /users/create(request)
+}

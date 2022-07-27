@@ -1,0 +1,25 @@
+FROM golang:1.16-alpine3.15 AS builder
+
+LABEL stage=gobuilder
+
+ENV CGO_ENABLED 0
+ENV GOOS linux
+ENV GOPROXY https://goproxy.cn,direct
+ENV GO111MODULE on
+
+WORKDIR /build/zero
+
+COPY . .
+RUN go mod tidy && go build -ldflags="-s -w" -o /app/cronclient cmd/cron/cron.go
+
+
+FROM alpine:3.15
+
+RUN sed -i 's#dl-cdn.alpinelinux.org#mirrors.aliyun.com#g' /etc/apk/repositories
+RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
+ENV TZ Asia/Shanghai
+
+WORKDIR /app
+COPY --from=builder /app/cronclient /app/cronclient
+
+ENTRYPOINT ["./cronclient"]
